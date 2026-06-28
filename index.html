@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ความทรงจำของเรา</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-title">
+        <span class="header-icon">✦</span>
+        <h1>ความทรงจำของเรา</h1>
+        <span class="header-icon">✦</span>
+      </div>
+      <p class="header-sub">บันทึกทุกช่วงเวลาที่มีความหมาย</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-add" id="btnAdd">+ เพิ่มความทรงจำ</button>
+    </div>
+  </header>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="ค้นหาความทรงจำ..." />
+    </div>
+    <div class="filter-group">
+      <select id="filterCategory">
+        <option value="">ทุกหมวดหมู่</option>
+        <option value="ชีวิต">🌱 ชีวิต</option>
+        <option value="ความรัก">❤️ ความรัก</option>
+        <option value="การเดินทาง">✈️ การเดินทาง</option>
+        <option value="ครอบครัว">👨‍👩‍👧 ครอบครัว</option>
+        <option value="เพื่อน">👫 เพื่อน</option>
+        <option value="ความสำเร็จ">🏆 ความสำเร็จ</option>
+        <option value="บทเรียน">📖 บทเรียน</option>
+        <option value="ความฝัน">🌙 ความฝัน</option>
+      </select>
+      <select id="filterMood">
+        <option value="">ทุกอารมณ์</option>
+        <option value="😊">😊 มีความสุข</option>
+        <option value="😢">😢 เศร้า</option>
+        <option value="😍">😍 ตื่นเต้น</option>
+        <option value="😌">😌 สงบ</option>
+        <option value="🥹">🥹 ซาบซึ้ง</option>
+        <option value="💪">💪 มุ่งมั่น</option>
+        <option value="🤔">🤔 ครุ่นคิด</option>
+      </select>
+      <select id="sortOrder">
+        <option value="newest">ใหม่ล่าสุด</option>
+        <option value="oldest">เก่าที่สุด</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num" id="totalCount">0</span>
+      <span class="stat-label">ความทรงจำทั้งหมด</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num" id="yearCount">0</span>
+      <span class="stat-label">ปีที่บันทึก</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-num" id="latestDate">-</span>
+      <span class="stat-label">บันทึกล่าสุด</span>
+    </div>
+  </div>
+
+  <!-- View Toggle -->
+  <div class="view-toggle">
+    <button class="view-btn active" id="viewTimeline" title="Timeline">📅 ไทม์ไลน์</button>
+    <button class="view-btn" id="viewGrid" title="Grid">🗂 ตาราง</button>
+  </div>
+
+  <!-- Memories Container -->
+  <main class="memories-container" id="memoriesContainer">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🌸</div>
+      <h2>เริ่มต้นบันทึกความทรงจำแรกของคุณ</h2>
+      <p>กดปุ่ม "เพิ่มความทรงจำ" เพื่อเริ่มต้น</p>
+      <button class="btn-add btn-add-center" onclick="document.getElementById('btnAdd').click()">+ เพิ่มความทรงจำแรก</button>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </main>
+
+  <!-- Modal: Add / Edit -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">✨ เพิ่มความทรงจำ</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="memoryForm">
+          <input type="hidden" id="memoryId" />
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>หัวข้อ *</label>
+              <input type="text" id="memTitle" placeholder="ชื่อความทรงจำนี้..." required />
+            </div>
+            <div class="form-group form-group-sm">
+              <label>วันที่ *</label>
+              <input type="date" id="memDate" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>หมวดหมู่</label>
+              <select id="memCategory">
+                <option value="ชีวิต">🌱 ชีวิต</option>
+                <option value="ความรัก">❤️ ความรัก</option>
+                <option value="การเดินทาง">✈️ การเดินทาง</option>
+                <option value="ครอบครัว">👨‍👩‍👧 ครอบครัว</option>
+                <option value="เพื่อน">👫 เพื่อน</option>
+                <option value="ความสำเร็จ">🏆 ความสำเร็จ</option>
+                <option value="บทเรียน">📖 บทเรียน</option>
+                <option value="ความฝัน">🌙 ความฝัน</option>
+              </select>
+            </div>
+            <div class="form-group form-group-sm">
+              <label>อารมณ์</label>
+              <select id="memMood">
+                <option value="😊">😊 มีความสุข</option>
+                <option value="😢">😢 เศร้า</option>
+                <option value="😍">😍 ตื่นเต้น</option>
+                <option value="😌">😌 สงบ</option>
+                <option value="🥹">🥹 ซาบซึ้ง</option>
+                <option value="💪">💪 มุ่งมั่น</option>
+                <option value="🤔">🤔 ครุ่นคิด</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>เรื่องราว *</label>
+            <textarea id="memContent" rows="5" placeholder="บอกเล่าเรื่องราวในวันนั้น..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>รูปภาพ (URL หรือ Base64)</label>
+            <div class="image-input-group">
+              <input type="text" id="memImage" placeholder="วาง URL รูปภาพที่นี่..." />
+              <span class="or-divider">หรือ</span>
+              <label class="btn-upload" for="memImageFile">📷 อัพโหลด</label>
+              <input type="file" id="memImageFile" accept="image/*" style="display:none" />
+            </div>
+            <div class="image-preview" id="imagePreview"></div>
+          </div>
+
+          <div class="form-group">
+            <label>แท็ก (คั่นด้วยจุลภาค)</label>
+            <input type="text" id="memTags" placeholder="เช่น: วันเกิด, ทะเล, ครั้งแรก..." />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="btnCancel">ยกเลิก</button>
+            <button type="submit" class="btn-save">💾 บันทึก</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: View Memory -->
+  <div class="modal-overlay" id="viewOverlay">
+    <div class="modal modal-view">
+      <button class="modal-close" id="viewClose">✕</button>
+      <div id="viewContent"></div>
+      <div class="view-actions">
+        <button class="btn-edit-view" id="btnEditView">✏️ แก้ไข</button>
+        <button class="btn-delete-view" id="btnDeleteView">🗑 ลบ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <footer class="site-footer">
+    <p>✦ บันทึกทุกช่วงเวลา ไว้ให้อนาคต ✦</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
